@@ -1,0 +1,12 @@
+.gradle/
+build/
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+test-output/
+hs_err_pid*.log
+.env
+.env.*
+local.properties

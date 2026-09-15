@@ -1,0 +1,85 @@
+plugins {
+    id 'java'
+}
+
+group = 'ru.school21.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 21
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.3'
+    testImplementation 'org.junit.platform:junit-platform-suite:1.10.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.10.3'
+    testImplementation 'org.testng:testng:7.10.2'
+    testRuntimeOnly 'org.slf4j:slf4j-simple:2.0.9'
+}
+
+tasks.withType(Test).configureEach {
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+    systemProperty 'file.encoding', 'UTF-8'
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
+}
+
+test {
+    description = 'Run all JUnit 5 tests without repeating suite selections.'
+    useJUnitPlatform {
+        includeEngines 'junit-jupiter'
+    }
+    include 'junitTests/**'
+}
+
+tasks.register('testNG', Test) {
+    description = 'Run all TestNG tests.'
+    group = 'verification'
+    useTestNG()
+    include 'testNGTests/**'
+}
+
+tasks.register('junitSuites', Test) {
+    description = 'Run the two explicit JUnit Platform suites.'
+    group = 'verification'
+    useJUnitPlatform {
+        includeEngines 'junit-platform-suite'
+    }
+    include 'suites/**'
+}
+
+tasks.register('testNGMethods', Test) {
+    description = 'Run MethodExamplesTestNG using the XML suite.'
+    group = 'verification'
+    useTestNG {
+        suites 'src/test/resources/testng-suites/testng-methods.xml'
+    }
+}
+
+tasks.register('testNGExample', Test) {
+    description = 'Run TestsExampleTestNG using the XML suite.'
+    group = 'verification'
+    useTestNG {
+        suites 'src/test/resources/testng-suites/testng-example.xml'
+    }
+}
+
+check {
+    dependsOn tasks.named('testNG')
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Test Suits: Example of execution order" verbose="1">
+
+    <test name="Execution order tests">
+        <classes>
+            <class name="testNGTests.TestsExampleTestNG"/>
+        </classes>
+    </test>
+
+</suite>
